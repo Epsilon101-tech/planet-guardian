@@ -34,13 +34,14 @@
             width: 100vw;
         }
 
-        /* شريط تبديل اللغات */
+        /* --- تعديل 1: شريط تبديل اللغات (نقلناه للأسفل قليلاً أو غيرنا تصميمه) --- */
         #lang-switcher {
             position: absolute;
-            top: 15px;
-            right: 15px;
+            top: 10px;
+            right: 50%; /* توسيط أو وضعه في مكان لا يتداخل */
+            transform: translateX(50%);
             display: flex;
-            gap: 10px;
+            gap: 5px;
             z-index: 100;
         }
 
@@ -48,10 +49,10 @@
             background: rgba(255, 255, 255, 0.1);
             border: 1px solid rgba(255, 255, 255, 0.3);
             color: white;
-            padding: 5px 10px;
-            border-radius: 8px;
+            padding: 4px 8px; /* تصغير الحجم قليلاً */
+            border-radius: 6px;
             cursor: pointer;
-            font-size: 14px;
+            font-size: 12px;
             backdrop-filter: blur(5px);
             transition: 0.3s;
         }
@@ -67,14 +68,13 @@
             position: relative;
             width: 100%;
             max-width: 500px;
-            height: 80vh;
+            flex: 1; /* لتأخذ المساحة المتبقية */
             background: radial-gradient(circle at center, #0f172a 0%, #020617 100%);
             overflow: hidden;
             border-radius: 0 0 20px 20px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.8);
         }
 
-        /* النجوم المتحركة في الخلفية */
         .stars {
             position: absolute;
             width: 100%; height: 100%;
@@ -89,7 +89,6 @@
             to { background-position: -1000px 1000px; }
         }
 
-        /* كوكب الأرض */
         #earth {
             position: absolute;
             bottom: -50px;
@@ -103,7 +102,6 @@
             transition: all 0.5s ease;
         }
 
-        /* تأثير تدمير الأرض */
         #earth.destroyed {
             background: radial-gradient(circle at 50% 10%, #fef08a, #ef4444, #7f1d1d);
             box-shadow: 0 -20px 80px rgba(239, 68, 68, 0.8), inset 0 20px 40px rgba(255,0,0,0.5);
@@ -116,13 +114,8 @@
             100% { transform: scale(1); bottom: -50px; filter: brightness(0.3) grayscale(1); }
         }
 
-        /* اهتزاز الشاشة */
-        .shake {
-            animation: shakeScreen 0.4s cubic-bezier(.36,.07,.19,.97) both;
-        }
-        .shake-heavy {
-            animation: shakeScreenHeavy 1.5s cubic-bezier(.36,.07,.19,.97) both;
-        }
+        .shake { animation: shakeScreen 0.4s cubic-bezier(.36,.07,.19,.97) both; }
+        .shake-heavy { animation: shakeScreenHeavy 1.5s cubic-bezier(.36,.07,.19,.97) both; }
 
         @keyframes shakeScreen {
             10%, 90% { transform: translate3d(-1px, 0, 0); }
@@ -136,15 +129,15 @@
             20%, 40%, 60%, 80% { transform: translate(10px, -10px); }
         }
 
-        /* واجهة اللعب */
+        /* --- تعديل 2: واجهة اللعب (نزلناها قليلاً لتفادي أزرار اللغة) --- */
         #hud {
             position: absolute;
-            top: 15px;
+            top: 40px; /* نزلناها لتكون أسفل أزرار اللغة */
             width: 100%;
             display: flex;
             justify-content: space-between;
-            padding: 0 20px;
-            font-size: 20px;
+            padding: 0 15px;
+            font-size: 18px; /* تصغير الخط قليلاً للهواتف */
             font-weight: 900;
             z-index: 10;
             text-shadow: 0 2px 5px rgba(0,0,0,1);
@@ -152,15 +145,14 @@
 
         .hearts { color: var(--danger); letter-spacing: 2px; }
 
-        /* النيزك */
         .meteor {
             position: absolute;
-            width: 80px;
-            height: 80px;
+            width: 70px; /* تصغير النيزك قليلاً */
+            height: 70px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 22px;
+            font-size: 20px;
             font-weight: 900;
             color: white;
             text-shadow: 1px 1px 2px #000;
@@ -171,15 +163,14 @@
             transition: opacity 0.2s;
         }
 
-        /* ذيل النيزك */
         .meteor::after {
             content: '';
             position: absolute;
-            top: -40px;
+            top: -30px;
             left: 50%;
             transform: translateX(-50%);
-            width: 30px;
-            height: 60px;
+            width: 25px;
+            height: 50px;
             background: linear-gradient(to top, rgba(239, 68, 68, 0.8), transparent);
             border-radius: 50%;
             z-index: -1;
@@ -192,21 +183,23 @@
             filter: brightness(2);
         }
 
-        /* منطقة الإدخال السفلية */
+        /* --- منطقة الإدخال السفلية (ضبط الارتفاع) --- */
         #controls {
             width: 100%;
             max-width: 500px;
             display: flex;
             gap: 10px;
-            padding: 15px 20px;
+            padding: 10px 15px; /* تقليل الحشوة لتوفير المساحة */
             background-color: #0f172a;
             border-top: 1px solid #1e293b;
+            height: 80px; /* تثبيت الارتفاع */
+            flex-shrink: 0; /* منع التقلص */
         }
 
         #answer-input {
             flex: 1;
-            padding: 15px;
-            font-size: 20px;
+            padding: 10px;
+            font-size: 18px;
             font-weight: bold;
             border: 2px solid #334155;
             border-radius: 12px;
@@ -234,11 +227,8 @@
             transition: 0.2s;
         }
 
-        #fire-btn:active {
-            transform: scale(0.95);
-        }
+        #fire-btn:active { transform: scale(0.95); }
 
-        /* الشاشات (البداية والنهاية) */
         .screen {
             position: absolute;
             inset: 0;
@@ -257,20 +247,20 @@
 
         .screen h1 {
             color: var(--primary);
-            font-size: 45px;
+            font-size: 35px; /* تصغير للعرض الجيد على الهواتف */
             margin-bottom: 15px;
             text-shadow: 0 5px 15px rgba(59, 130, 246, 0.5);
         }
 
         .screen p {
-            font-size: 18px;
+            font-size: 16px;
             margin-bottom: 30px;
             color: #cbd5e1;
         }
 
         .start-btn {
-            padding: 15px 40px;
-            font-size: 22px;
+            padding: 12px 30px;
+            font-size: 20px;
             background: linear-gradient(135deg, #10b981, #059669);
             color: white;
             border: none;
@@ -286,15 +276,11 @@
             box-shadow: 0 15px 25px rgba(16, 185, 129, 0.6);
         }
 
-        #game-over-screen h1 {
-            color: var(--danger);
-            text-shadow: 0 5px 15px rgba(239, 68, 68, 0.5);
-        }
+        #game-over-screen h1 { color: var(--danger); text-shadow: 0 5px 15px rgba(239, 68, 68, 0.5); }
     </style>
 </head>
 <body>
 
-    <!-- أزرار اللغة -->
     <div id="lang-switcher">
         <button class="lang-btn active" onclick="setLang('ar')">عربي</button>
         <button class="lang-btn" onclick="setLang('fr')">FR</button>
@@ -305,71 +291,47 @@
         <div class="stars"></div>
         <div id="earth"></div>
 
-        <!-- شاشة البداية -->
         <div id="start-screen" class="screen">
             <h1 id="t-title">حارس الكوكب</h1>
             <p id="t-desc">حل العمليات الحسابية لتدمير النيازك قبل أن تصطدم بالأرض!</p>
             <button class="start-btn" id="t-start" onclick="startGame()">ابدأ اللعب</button>
         </div>
 
-        <!-- شاشة النهاية -->
         <div id="game-over-screen" class="screen hidden">
             <h1 id="t-over">انتهت اللعبة!</h1>
             <h2 style="margin-bottom:20px;"><span id="t-score-res">النتيجة:</span> <span id="final-score" style="color:var(--primary); font-size:40px;">0</span></h2>
             <button class="start-btn" id="t-restart" onclick="startGame()">العب مرة أخرى</button>
         </div>
 
-        <!-- الواجهة -->
         <div id="hud" class="hidden">
             <div><span id="t-lives">المحاولات:</span> <span id="lives-display" class="hearts">❤️❤️❤️</span></div>
             <div><span id="t-score">النقاط:</span> <span id="score-display">0</span></div>
         </div>
 
-        <!-- النيازك تظهر هنا -->
         <div id="play-area"></div>
     </div>
 
-    <!-- حقل الإدخال -->
     <div id="controls">
         <input type="number" id="answer-input" placeholder="اكتب الحل..." disabled>
         <button id="fire-btn">🚀</button>
     </div>
 
     <script>
-        // --- الترجمة ---
         const translations = {
             ar: {
-                title: "حارس الكوكب",
-                desc: "حل العمليات الحسابية لتدمير النيازك قبل أن تصطدم بالأرض!",
-                start: "ابدأ اللعب",
-                over: "الكوكب تدمر!",
-                scoreRes: "النتيجة النهائية:",
-                restart: "العب مرة أخرى",
-                lives: "المحاولات:",
-                score: "النقاط:",
-                placeholder: "اكتب الحل..."
+                title: "حارس الكوكب", desc: "حل العمليات الحسابية لتدمير النيازك قبل أن تصطدم بالأرض!",
+                start: "ابدأ اللعب", over: "الكوكب تدمر!", scoreRes: "النتيجة النهائية:",
+                restart: "العب مرة أخرى", lives: "المحاولات:", score: "النقاط:", placeholder: "اكتب الحل..."
             },
             fr: {
-                title: "Gardien de la Planète",
-                desc: "Résolvez les calculs pour détruire les météores avant l'impact !",
-                start: "Jouer",
-                over: "Planète Détruite !",
-                scoreRes: "Score Final :",
-                restart: "Rejouer",
-                lives: "Vies :",
-                score: "Score :",
-                placeholder: "Votre réponse..."
+                title: "Gardien de la Planète", desc: "Résolvez les calculs pour détruire les météores !",
+                start: "Jouer", over: "Planète Détruite !", scoreRes: "Score Final :",
+                restart: "Rejouer", lives: "Vies :", score: "Score :", placeholder: "Votre réponse..."
             },
             en: {
-                title: "Planet Guardian",
-                desc: "Solve math problems to destroy meteors before they hit Earth!",
-                start: "Start Game",
-                over: "Planet Destroyed!",
-                scoreRes: "Final Score:",
-                restart: "Play Again",
-                lives: "Lives:",
-                score: "Score:",
-                placeholder: "Type answer..."
+                title: "Planet Guardian", desc: "Solve math problems to destroy meteors!",
+                start: "Start Game", over: "Planet Destroyed!", scoreRes: "Final Score:",
+                restart: "Play Again", lives: "Lives:", score: "Score:", placeholder: "Type answer..."
             }
         };
 
@@ -390,7 +352,6 @@
             document.getElementById('t-score').innerText = translations[lang].score;
             document.getElementById('answer-input').placeholder = translations[lang].placeholder;
 
-            // تحديث أزرار اللغة
             document.querySelectorAll('.lang-btn').forEach(btn => {
                 btn.classList.remove('active');
                 if(btn.innerText.toLowerCase().includes(lang) || (lang==='ar' && btn.innerText==='عربي')) {
@@ -399,7 +360,6 @@
             });
         }
 
-        // --- منطق اللعبة ---
         const playArea = document.getElementById('play-area');
         const answerInput = document.getElementById('answer-input');
         const fireBtn = document.getElementById('fire-btn');
@@ -432,7 +392,6 @@
             meteorSpeed = 1.2;
             spawnRate = 2500;
             
-            // مسح النيازك القديمة
             meteors.forEach(m => m.element.remove());
             meteors = [];
             
@@ -452,8 +411,11 @@
                 num2 = Math.floor(Math.random() * 15) + 1;
                 answer = num1 + num2;
             } else if (op === '-') {
-                num1 = Math.floor(Math.random() * 20) + 10;
-                num2 = Math.floor(Math.random() * num1) + 1;
+                // --- تعديل 3: ضمان أن نتيجة الطرح موجبة دائماً ---
+                let max = Math.floor(Math.random() * 20) + 10;
+                let min = Math.floor(Math.random() * (max - 1)) + 1;
+                num1 = max;
+                num2 = min;
                 answer = num1 - num2;
             } else {
                 num1 = Math.floor(Math.random() * 10) + 1;
@@ -465,9 +427,8 @@
             meteorEl.classList.add('meteor');
             meteorEl.textContent = `${num1} ${op==='x'?'×':op} ${num2}`;
             
-            // عرض الحاوية ناقص عرض النيزك لضمان عدم خروجه
             const containerWidth = gameContainer.offsetWidth;
-            const maxPosX = containerWidth - 90; 
+            const maxPosX = containerWidth - 80; 
             const posX = Math.max(10, Math.floor(Math.random() * maxPosX));
             
             meteorEl.style.left = `${posX}px`;
@@ -478,7 +439,7 @@
         }
 
         function updateGame() {
-            const earthTop = gameContainer.offsetHeight - 80; // خط الاصطدام
+            const earthTop = gameContainer.offsetHeight - 70;
 
             for (let i = 0; i < meteors.length; i++) {
                 let m = meteors[i];
@@ -508,7 +469,6 @@
                     let originalIndex = meteors.indexOf(sortedMeteors[i]);
                     let mElement = meteors[originalIndex].element;
                     
-                    // تأثير التدمير
                     mElement.classList.add('destroyed');
                     setTimeout(() => mElement.remove(), 200);
 
@@ -522,7 +482,6 @@
             }
         }
 
-        // دعم الإدخال عبر Enter أو الزر
         answerInput.addEventListener('keypress', e => { if (e.key === 'Enter') checkAnswer(); });
         fireBtn.addEventListener('click', checkAnswer);
 
@@ -539,9 +498,8 @@
             lives--;
             updateHUD();
             
-            // اهتزاز الشاشة عند الخسارة
             gameContainer.classList.remove('shake');
-            void gameContainer.offsetWidth; // Trigger reflow
+            void gameContainer.offsetWidth; 
             gameContainer.classList.add('shake');
 
             if (lives <= 0) {
@@ -552,7 +510,7 @@
         function updateHUD() {
             document.getElementById('score-display').textContent = score;
             let hearts = '';
-            for(let i=0; i<lives; i++) hearts += '❤️';
+            for(let i=0; i<lives; i++) hearts += '❤️️';
             livesDisplay.textContent = hearts;
         }
 
@@ -561,15 +519,12 @@
             clearInterval(spawnInterval);
             answerInput.disabled = true;
             
-            // تأثير التدمير الكارثي
             gameContainer.classList.remove('shake');
             gameContainer.classList.add('shake-heavy');
             earth.classList.add('destroyed');
 
-            // إخفاء النيازك المتبقية
             meteors.forEach(m => m.element.remove());
 
-            // إظهار شاشة النهاية بعد ثانية ونصف
             setTimeout(() => {
                 document.getElementById('final-score').textContent = score;
                 document.getElementById('game-over-screen').classList.remove('hidden');
