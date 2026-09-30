@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>حارس الكوكب | Planet Guardian</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@700;900&display=swap');
+
+        :root {
+            --primary: #3b82f6;
+            --danger: #ef4444;
+            --earth: #10b981;
+            --bg: #050b14;
+            --text: #f8fafc;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Cairo', sans-serif;
+            user-select: none;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100vh;
+            width: 100vw;
+        }
+
+        /* شريط تبديل اللغات */
+        #lang-switcher {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            display: flex;
+            gap: 10px;
+            z-index: 100;
+        }
+
+        .lang-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            backdrop-filter: blur(5px);
+            transition: 0.3s;
+        }
+
+        .lang-btn.active {
+            background: var(--primary);
+            border-color: var(--primary);
+            box-shadow: 0 0 10px var(--primary);
+        }
+
+        /* حاوية اللعبة الرئيسية */
+        #game-container {
+            position: relative;
+            width: 100%;
+            max-width: 500px;
+            height: 80vh;
+            background: radial-gradient(circle at center, #0f172a 0%, #020617 100%);
+            overflow: hidden;
+            border-radius: 0 0 20px 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+        }
+
+        /* النجوم المتحركة في الخلفية */
+        .stars {
+            position: absolute;
+            width: 100%; height: 100%;
+            background: transparent url('https://www.transparenttextures.com/patterns/stardust.png') repeat;
+            animation: moveStars 50s linear infinite;
+            opacity: 0.4;
+            z-index: 0;
+        }
+
+        @keyframes moveStars {
+            from { background-position: 0 0; }
+            to { background-position: -1000px 1000px; }
+        }
+
+        /* كوكب الأرض */
+        #earth {
+            position: absolute;
+            bottom: -50px;
+            left: -10%;
+            width: 120%;
+            height: 120px;
+            background: radial-gradient(circle at 50% 10%, #34d399, #064e3b);
+            border-radius: 50% 50% 0 0;
+            box-shadow: 0 -10px 40px rgba(16, 185, 129, 0.4), inset 0 20px 20px rgba(255,255,255,0.1);
+            z-index: 5;
+            transition: all 0.5s ease;
+        }
+
+        /* تأثير تدمير الأرض */
+        #earth.destroyed {
+            background: radial-gradient(circle at 50% 10%, #fef08a, #ef4444, #7f1d1d);
+            box-shadow: 0 -20px 80px rgba(239, 68, 68, 0.8), inset 0 20px 40px rgba(255,0,0,0.5);
+            animation: explodeEarth 1.5s forwards;
+        }
+
+        @keyframes explodeEarth {
+            0% { transform: scale(1); bottom: -50px; }
+            50% { transform: scale(1.1); bottom: -30px; filter: brightness(2); }
+            100% { transform: scale(1); bottom: -50px; filter: brightness(0.3) grayscale(1); }
+        }
+
+        /* اهتزاز الشاشة */
+        .shake {
+            animation: shakeScreen 0.4s cubic-bezier(.36,.07,.19,.97) both;
+        }
+        .shake-heavy {
+            animation: shakeScreenHeavy 1.5s cubic-bezier(.36,.07,.19,.97) both;
+        }
+
+        @keyframes shakeScreen {
+            10%, 90% { transform: translate3d(-1px, 0, 0); }
+            20%, 80% { transform: translate3d(2px, 0, 0); }
+            30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+            40%, 60% { transform: translate3d(4px, 0, 0); }
+        }
+        @keyframes shakeScreenHeavy {
+            0%, 100% { transform: translate(0, 0); }
+            10%, 30%, 50%, 70%, 90% { transform: translate(-10px, 10px); }
+            20%, 40%, 60%, 80% { transform: translate(10px, -10px); }
+        }
+
+        /* واجهة اللعب */
+        #hud {
+            position: absolute;
+            top: 15px;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            padding: 0 20px;
+            font-size: 20px;
+            font-weight: 900;
+            z-index: 10;
+            text-shadow: 0 2px 5px rgba(0,0,0,1);
+        }
+
+        .hearts { color: var(--danger); letter-spacing: 2px; }
+
+        /* النيزك */
+        .meteor {
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            font-weight: 900;
+            color: white;
+            text-shadow: 1px 1px 2px #000;
+            background: radial-gradient(circle at 30% 30%, #fb923c, #dc2626, #7f1d1d);
+            border-radius: 40% 60% 50% 40%;
+            box-shadow: inset -5px -5px 15px rgba(0,0,0,0.5), 0 0 15px rgba(239, 68, 68, 0.8);
+            z-index: 4;
+            transition: opacity 0.2s;
+        }
+
+        /* ذيل النيزك */
+        .meteor::after {
+            content: '';
+            position: absolute;
+            top: -40px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 30px;
+            height: 60px;
+            background: linear-gradient(to top, rgba(239, 68, 68, 0.8), transparent);
+            border-radius: 50%;
+            z-index: -1;
+            filter: blur(5px);
+        }
+
+        .meteor.destroyed {
+            transform: scale(1.5);
+            opacity: 0;
+            filter: brightness(2);
+        }
+
+        /* منطقة الإدخال السفلية */
+        #controls {
+            width: 100%;
+            max-width: 500px;
+            display: flex;
+            gap: 10px;
+            padding: 15px 20px;
+            background-color: #0f172a;
+            border-top: 1px solid #1e293b;
+        }
+
+        #answer-input {
+            flex: 1;
+            padding: 15px;
+            font-size: 20px;
+            font-weight: bold;
+            border: 2px solid #334155;
+            border-radius: 12px;
+            background-color: #1e293b;
+            color: white;
+            text-align: center;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        #answer-input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.4);
+        }
+
+        #fire-btn {
+            background: linear-gradient(135deg, var(--primary), #1d4ed8);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 0 20px;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(37, 99, 235, 0.4);
+            transition: 0.2s;
+        }
+
+        #fire-btn:active {
+            transform: scale(0.95);
+        }
+
+        /* الشاشات (البداية والنهاية) */
+        .screen {
+            position: absolute;
+            inset: 0;
+            background-color: rgba(2, 6, 23, 0.85);
+            backdrop-filter: blur(10px);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 20;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .hidden { display: none !important; }
+
+        .screen h1 {
+            color: var(--primary);
+            font-size: 45px;
+            margin-bottom: 15px;
+            text-shadow: 0 5px 15px rgba(59, 130, 246, 0.5);
+        }
+
+        .screen p {
+            font-size: 18px;
+            margin-bottom: 30px;
+            color: #cbd5e1;
+        }
+
+        .start-btn {
+            padding: 15px 40px;
+            font-size: 22px;
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 900;
+            box-shadow: 0 10px 20px rgba(16, 185, 129, 0.4);
+            transition: 0.3s;
+        }
+
+        .start-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 25px rgba(16, 185, 129, 0.6);
+        }
+
+        #game-over-screen h1 {
+            color: var(--danger);
+            text-shadow: 0 5px 15px rgba(239, 68, 68, 0.5);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- أزرار اللغة -->
+    <div id="lang-switcher">
+        <button class="lang-btn active" onclick="setLang('ar')">عربي</button>
+        <button class="lang-btn" onclick="setLang('fr')">FR</button>
+        <button class="lang-btn" onclick="setLang('en')">EN</button>
+    </div>
+
+    <div id="game-container">
+        <div class="stars"></div>
+        <div id="earth"></div>
+
+        <!-- شاشة البداية -->
+        <div id="start-screen" class="screen">
+            <h1 id="t-title">حارس الكوكب</h1>
+            <p id="t-desc">حل العمليات الحسابية لتدمير النيازك قبل أن تصطدم بالأرض!</p>
+            <button class="start-btn" id="t-start" onclick="startGame()">ابدأ اللعب</button>
+        </div>
+
+        <!-- شاشة النهاية -->
+        <div id="game-over-screen" class="screen hidden">
+            <h1 id="t-over">انتهت اللعبة!</h1>
+            <h2 style="margin-bottom:20px;"><span id="t-score-res">النتيجة:</span> <span id="final-score" style="color:var(--primary); font-size:40px;">0</span></h2>
+            <button class="start-btn" id="t-restart" onclick="startGame()">العب مرة أخرى</button>
+        </div>
+
+        <!-- الواجهة -->
+        <div id="hud" class="hidden">
+            <div><span id="t-lives">المحاولات:</span> <span id="lives-display" class="hearts">❤️❤️❤️</span></div>
+            <div><span id="t-score">النقاط:</span> <span id="score-display">0</span></div>
+        </div>
+
+        <!-- النيازك تظهر هنا -->
+        <div id="play-area"></div>
+    </div>
+
+    <!-- حقل الإدخال -->
+    <div id="controls">
+        <input type="number" id="answer-input" placeholder="اكتب الحل..." disabled>
+        <button id="fire-btn">🚀</button>
+    </div>
+
+    <script>
+        // --- الترجمة ---
+        const translations = {
+            ar: {
+                title: "حارس الكوكب",
+                desc: "حل العمليات الحسابية لتدمير النيازك قبل أن تصطدم بالأرض!",
+                start: "ابدأ اللعب",
+                over: "الكوكب تدمر!",
+                scoreRes: "النتيجة النهائية:",
+                restart: "العب مرة أخرى",
+                lives: "المحاولات:",
+                score: "النقاط:",
+                placeholder: "اكتب الحل..."
+            },
+            fr: {
+                title: "Gardien de la Planète",
+                desc: "Résolvez les calculs pour détruire les météores avant l'impact !",
+                start: "Jouer",
+                over: "Planète Détruite !",
+                scoreRes: "Score Final :",
+                restart: "Rejouer",
+                lives: "Vies :",
+                score: "Score :",
+                placeholder: "Votre réponse..."
+            },
+            en: {
+                title: "Planet Guardian",
+                desc: "Solve math problems to destroy meteors before they hit Earth!",
+                start: "Start Game",
+                over: "Planet Destroyed!",
+                scoreRes: "Final Score:",
+                restart: "Play Again",
+                lives: "Lives:",
+                score: "Score:",
+                placeholder: "Type answer..."
+            }
+        };
+
+        let currentLang = 'ar';
+
+        function setLang(lang) {
+            currentLang = lang;
+            document.documentElement.lang = lang;
+            document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+            
+            document.getElementById('t-title').innerText = translations[lang].title;
+            document.getElementById('t-desc').innerText = translations[lang].desc;
+            document.getElementById('t-start').innerText = translations[lang].start;
+            document.getElementById('t-over').innerText = translations[lang].over;
+            document.getElementById('t-score-res').innerText = translations[lang].scoreRes;
+            document.getElementById('t-restart').innerText = translations[lang].restart;
+            document.getElementById('t-lives').innerText = translations[lang].lives;
+            document.getElementById('t-score').innerText = translations[lang].score;
+            document.getElementById('answer-input').placeholder = translations[lang].placeholder;
+
+            // تحديث أزرار اللغة
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if(btn.innerText.toLowerCase().includes(lang) || (lang==='ar' && btn.innerText==='عربي')) {
+                    btn.classList.add('active');
+                }
+            });
+        }
+
+        // --- منطق اللعبة ---
+        const playArea = document.getElementById('play-area');
+        const answerInput = document.getElementById('answer-input');
+        const fireBtn = document.getElementById('fire-btn');
+        const scoreDisplay = document.getElementById('score-display');
+        const livesDisplay = document.getElementById('lives-display');
+        const earth = document.getElementById('earth');
+        const gameContainer = document.getElementById('game-container');
+        
+        let score = 0;
+        let lives = 3;
+        let meteors = [];
+        let gameInterval;
+        let spawnInterval;
+        let meteorSpeed = 1;
+        let spawnRate = 2500;
+
+        function startGame() {
+            document.getElementById('start-screen').classList.add('hidden');
+            document.getElementById('game-over-screen').classList.add('hidden');
+            document.getElementById('hud').classList.remove('hidden');
+            earth.classList.remove('destroyed');
+            gameContainer.classList.remove('shake-heavy');
+            
+            answerInput.disabled = false;
+            answerInput.value = '';
+            answerInput.focus();
+
+            score = 0;
+            lives = 3;
+            meteorSpeed = 1.2;
+            spawnRate = 2500;
+            
+            // مسح النيازك القديمة
+            meteors.forEach(m => m.element.remove());
+            meteors = [];
+            
+            updateHUD();
+
+            gameInterval = setInterval(updateGame, 20);
+            spawnInterval = setInterval(createMeteor, spawnRate);
+        }
+
+        function createMeteor() {
+            const operations = ['+', '-', 'x'];
+            const op = operations[Math.floor(Math.random() * operations.length)];
+            let num1, num2, answer;
+
+            if (op === '+') {
+                num1 = Math.floor(Math.random() * 15) + 1;
+                num2 = Math.floor(Math.random() * 15) + 1;
+                answer = num1 + num2;
+            } else if (op === '-') {
+                num1 = Math.floor(Math.random() * 20) + 10;
+                num2 = Math.floor(Math.random() * num1) + 1;
+                answer = num1 - num2;
+            } else {
+                num1 = Math.floor(Math.random() * 10) + 1;
+                num2 = Math.floor(Math.random() * 10) + 1;
+                answer = num1 * num2;
+            }
+
+            const meteorEl = document.createElement('div');
+            meteorEl.classList.add('meteor');
+            meteorEl.textContent = `${num1} ${op==='x'?'×':op} ${num2}`;
+            
+            // عرض الحاوية ناقص عرض النيزك لضمان عدم خروجه
+            const containerWidth = gameContainer.offsetWidth;
+            const maxPosX = containerWidth - 90; 
+            const posX = Math.max(10, Math.floor(Math.random() * maxPosX));
+            
+            meteorEl.style.left = `${posX}px`;
+            meteorEl.style.top = `-80px`;
+
+            playArea.appendChild(meteorEl);
+            meteors.push({ element: meteorEl, answer: answer, y: -80 });
+        }
+
+        function updateGame() {
+            const earthTop = gameContainer.offsetHeight - 80; // خط الاصطدام
+
+            for (let i = 0; i < meteors.length; i++) {
+                let m = meteors[i];
+                m.y += meteorSpeed;
+                m.element.style.top = `${m.y}px`;
+
+                if (m.y > earthTop) {
+                    m.element.remove();
+                    meteors.splice(i, 1);
+                    i--;
+                    loseLife();
+                }
+            }
+        }
+
+        function checkAnswer() {
+            const playerAnswer = parseInt(answerInput.value);
+            answerInput.value = ''; 
+            answerInput.focus();
+
+            if (isNaN(playerAnswer)) return;
+
+            let sortedMeteors = [...meteors].sort((a, b) => b.y - a.y);
+            
+            for (let i = 0; i < sortedMeteors.length; i++) {
+                if (sortedMeteors[i].answer === playerAnswer) {
+                    let originalIndex = meteors.indexOf(sortedMeteors[i]);
+                    let mElement = meteors[originalIndex].element;
+                    
+                    // تأثير التدمير
+                    mElement.classList.add('destroyed');
+                    setTimeout(() => mElement.remove(), 200);
+
+                    meteors.splice(originalIndex, 1);
+                    
+                    score += 10;
+                    updateHUD();
+                    increaseDifficulty();
+                    break;
+                }
+            }
+        }
+
+        // دعم الإدخال عبر Enter أو الزر
+        answerInput.addEventListener('keypress', e => { if (e.key === 'Enter') checkAnswer(); });
+        fireBtn.addEventListener('click', checkAnswer);
+
+        function increaseDifficulty() {
+            if (score > 0 && score % 50 === 0) {
+                meteorSpeed += 0.2;
+                clearInterval(spawnInterval);
+                spawnRate = Math.max(800, spawnRate - 200);
+                spawnInterval = setInterval(createMeteor, spawnRate);
+            }
+        }
+
+        function loseLife() {
+            lives--;
+            updateHUD();
+            
+            // اهتزاز الشاشة عند الخسارة
+            gameContainer.classList.remove('shake');
+            void gameContainer.offsetWidth; // Trigger reflow
+            gameContainer.classList.add('shake');
+
+            if (lives <= 0) {
+                triggerEarthExplosion();
+            }
+        }
+
+        function updateHUD() {
+            document.getElementById('score-display').textContent = score;
+            let hearts = '';
+            for(let i=0; i<lives; i++) hearts += '❤️';
+            livesDisplay.textContent = hearts;
+        }
+
+        function triggerEarthExplosion() {
+            clearInterval(gameInterval);
+            clearInterval(spawnInterval);
+            answerInput.disabled = true;
+            
+            // تأثير التدمير الكارثي
+            gameContainer.classList.remove('shake');
+            gameContainer.classList.add('shake-heavy');
+            earth.classList.add('destroyed');
+
+            // إخفاء النيازك المتبقية
+            meteors.forEach(m => m.element.remove());
+
+            // إظهار شاشة النهاية بعد ثانية ونصف
+            setTimeout(() => {
+                document.getElementById('final-score').textContent = score;
+                document.getElementById('game-over-screen').classList.remove('hidden');
+                document.getElementById('hud').classList.add('hidden');
+            }, 1500);
+        }
+    </script>
+</body>
+</html>
