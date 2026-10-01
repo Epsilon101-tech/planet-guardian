@@ -135,7 +135,6 @@
             white-space: nowrap;
         }
 
-        /* لافتة ترقية المستوى */
         #level-banner {
             position: absolute;
             top: 85px;
@@ -170,7 +169,7 @@
             opacity: 0.4;
         }
 
-        /* 4. كوكب الأرض السينمائي الفاخر */
+        /* 4. كوكب الأرض السفلي أثناء اللعب */
         #earth-wrapper {
             position: absolute;
             bottom: -15px;
@@ -180,7 +179,7 @@
             height: 105px;
             z-index: 6;
             pointer-events: none;
-            transition: transform 0.3s ease, filter 0.5s ease;
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.5s ease;
         }
 
         .earth-svg {
@@ -190,63 +189,85 @@
             filter: drop-shadow(0 -6px 20px rgba(56, 189, 248, 0.55));
         }
 
-        /* الأرض المدمرة بعد الاصطدام الكارثي */
-        #earth-wrapper.shattered {
-            filter: drop-shadow(0 -10px 40px rgba(239, 68, 68, 0.95)) brightness(1.3) contrast(1.2);
-            animation: planetRumble 0.35s infinite alternate;
-        }
-
-        @keyframes planetRumble {
-            0% { transform: translateX(-50%) scale(1); }
-            100% { transform: translateX(-50%) scale(1.04); }
-        }
-
-        /* 5. تصميم النيزك البركاني */
+        /* 5. تصميم النيزك الواقعي المتدرج الألوان والفوهات */
         .meteor {
             position: absolute;
-            width: 74px;
-            height: 74px;
+            width: 78px;
+            height: 78px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 19px;
-            font-weight: 900;
-            color: #ffffff;
-            text-shadow: 0 2px 5px rgba(0,0,0,0.95);
-            border-radius: 46% 54% 50% 50%;
-            background: radial-gradient(circle at 35% 35%, #ffedd5 0%, #f97316 40%, #b91c1c 75%, #450a0a 100%);
-            box-shadow: 0 0 22px rgba(249, 115, 22, 0.8), inset -3px -3px 8px rgba(0,0,0,0.7);
-            border: 1.5px solid rgba(254, 215, 170, 0.4);
             z-index: 9;
             direction: ltr;
         }
 
-        .meteor-flame {
+        .meteor-rock {
             position: absolute;
-            top: -36px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 28px;
-            height: 48px;
-            background: linear-gradient(to top, rgba(234, 88, 12, 0.9), rgba(245, 158, 11, 0.6), transparent);
-            border-radius: 50% 50% 20% 20%;
-            filter: blur(3px);
-            z-index: -1;
-            animation: flameFlicker 0.15s infinite alternate;
+            inset: 0;
+            border-radius: 44% 56% 51% 49% / 53% 47% 53% 47%;
+            background: 
+                radial-gradient(circle at 25% 25%, rgba(254, 240, 138, 0.9) 0%, rgba(249, 115, 22, 0.8) 18%, transparent 40%),
+                radial-gradient(circle at 70% 65%, #1c1917 0%, #292524 45%, #44403c 70%, #7c2d12 100%);
+            box-shadow: 
+                inset -4px -4px 10px rgba(0,0,0,0.85),
+                inset 3px 3px 8px rgba(251, 146, 60, 0.8),
+                0 0 25px rgba(234, 88, 12, 0.85);
+            border: 1.5px solid rgba(253, 186, 116, 0.5);
+            overflow: hidden;
         }
 
-        @keyframes flameFlicker {
-            from { height: 44px; opacity: 0.8; }
-            to { height: 52px; opacity: 1; transform: translateX(-50%) scaleX(1.1); }
+        /* فوهات صدمية في النيزك (Craters) */
+        .meteor-crater {
+            position: absolute;
+            border-radius: 50%;
+            background: #1c1917;
+            box-shadow: inset 1px 1px 3px #000, 0 0 2px rgba(251, 146, 60, 0.5);
+        }
+        .crater-1 { width: 14px; height: 12px; top: 18px; left: 16px; opacity: 0.85; }
+        .crater-2 { width: 10px; height: 9px; bottom: 18px; right: 18px; opacity: 0.8; }
+        .crater-3 { width: 8px; height: 8px; top: 46px; left: 34px; opacity: 0.7; }
+
+        /* ذيل البلازما واللهب المتدرج */
+        .meteor-flame {
+            position: absolute;
+            top: -42px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 32px;
+            height: 56px;
+            background: linear-gradient(to top, rgba(254, 240, 138, 0.95), rgba(249, 115, 22, 0.85) 45%, rgba(220, 38, 38, 0.5) 75%, transparent);
+            border-radius: 50% 50% 25% 25%;
+            filter: blur(3px);
+            z-index: -1;
+            animation: flameThrust 0.12s infinite alternate;
+        }
+
+        @keyframes flameThrust {
+            from { height: 50px; opacity: 0.85; transform: translateX(-50%) scaleX(0.95); }
+            to { height: 60px; opacity: 1; transform: translateX(-50%) scaleX(1.1); }
+        }
+
+        .meteor-text {
+            position: relative;
+            z-index: 2;
+            font-size: 18px;
+            font-weight: 900;
+            color: #ffffff;
+            text-shadow: 0 2px 4px #000, 0 0 8px rgba(0,0,0,0.9);
+            background: rgba(15, 23, 42, 0.65);
+            padding: 2px 8px;
+            border-radius: 10px;
+            border: 1px solid rgba(254, 215, 170, 0.3);
+            white-space: nowrap;
         }
 
         .meteor.exploded {
-            transform: scale(1.8);
+            transform: scale(2);
             opacity: 0;
-            transition: 0.2s ease-out;
+            transition: 0.22s ease-out;
         }
 
-        /* 6. الصاروخ المنطلق لضرب النيزك */
+        /* 6. الصاروخ المنطلق */
         .rocket-projectile {
             position: absolute;
             width: 20px;
@@ -259,7 +280,7 @@
         .rocket-body {
             width: 100%;
             height: 100%;
-            background: linear-gradient(to top, #64748b 0%, #ffffff 60%, #38bdf8 100%);
+            background: linear-gradient(to top, #475569 0%, #ffffff 65%, #38bdf8 100%);
             border-radius: 50% 50% 25% 25%;
             box-shadow: 0 0 14px rgba(56, 189, 248, 0.95);
             position: relative;
@@ -272,7 +293,7 @@
             transform: translateX(-50%);
             width: 10px;
             height: 20px;
-            background: linear-gradient(to bottom, #f59e0b, #ef4444, transparent);
+            background: linear-gradient(to bottom, #fef08a, #f97316, transparent);
             border-radius: 50%;
             filter: blur(2px);
             animation: thrusterPuff 0.08s infinite alternate;
@@ -340,7 +361,106 @@
         .btn-fire { background: linear-gradient(135deg, #2563eb, #1d4ed8); border-color: #3b82f6; font-size: 18px; }
         .btn-del { background: #2c161d; border-color: #831843; color: #f43f5e; font-size: 16px; }
 
-        /* 8. مؤثرات الانفجار الكارثي */
+        /* 8. المشهد الكروي النهائي لكوكب الأرض المدمر والقمر الدوار */
+        #cinematic-gameover-scene {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            pointer-events: none;
+            opacity: 0;
+            transform: scale(0.6);
+            transition: opacity 1s ease, transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+            z-index: 12;
+        }
+
+        #cinematic-gameover-scene.active {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .destroyed-earth-globe {
+            position: relative;
+            width: 170px;
+            height: 170px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 40% 40%, #fef08a 0%, #ea580c 25%, #7f1d1d 60%, #1c1917 100%);
+            box-shadow: 0 0 50px rgba(234, 88, 12, 0.7), inset -10px -10px 30px #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* صفائح وشقوق الأرض المنشطرة */
+        .globe-crust-svg {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            animation: slowPlanetTwist 40s linear infinite;
+        }
+
+        @keyframes slowPlanetTwist {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* ركام وشظايا الصخور الكوكبية المحيطة */
+        .debris-ring {
+            position: absolute;
+            width: 250px;
+            height: 250px;
+            border-radius: 50%;
+            border: 1px dashed rgba(245, 158, 11, 0.3);
+            pointer-events: none;
+            transform: rotateX(72deg);
+        }
+
+        /* مدار القمر الدوار */
+        .moon-orbit-track {
+            position: absolute;
+            width: 260px;
+            height: 100px;
+            border-radius: 50%;
+            transform: rotate(-18deg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .moon-orbit-rotator {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            animation: orbitMoon 5.5s linear infinite;
+        }
+
+        @keyframes orbitMoon {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .moon-sphere {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 35% 35%, #f1f5f9 0%, #94a3b8 50%, #475569 85%, #0f172a 100%);
+            box-shadow: 0 0 12px rgba(255, 255, 255, 0.6), inset -2px -2px 4px #000;
+        }
+
+        .moon-crater {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(15, 23, 42, 0.45);
+        }
+
+        /* 9. مؤثرات الانفجار الكارثي */
         #flash-screen {
             position: absolute;
             inset: 0;
@@ -419,6 +539,12 @@
 
         .overlay-screen.hidden { display: none !important; }
 
+        /* شاشة النهاية الشفافة لإبراز الكوكب المدمر والقمر خلفها */
+        #gameover-modal {
+            background: rgba(7, 13, 25, 0.65);
+            backdrop-filter: blur(4px);
+        }
+
         .overlay-screen h1 {
             color: #60a5fa;
             font-size: 30px;
@@ -444,6 +570,7 @@
             cursor: pointer;
             box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
             transition: 0.2s;
+            pointer-events: auto;
         }
 
         .main-btn:active { transform: scale(0.95); }
@@ -467,7 +594,7 @@
             </div>
         </div>
 
-        <!-- 2. شريط اللعبة المقسم هندسياً -->
+        <!-- 2. شريط اللعبة -->
         <div class="hud-grid">
             <div class="hud-lives">
                 <span id="t-lives">المحاولات:</span> <span id="lives-box" class="hearts">❤️❤️❤️</span>
@@ -480,10 +607,11 @@
             </div>
         </div>
 
-        <!-- 3. الفضاء + كوكب الأرض الواقعي -->
+        <!-- 3. مساحة الفضاء واللعب -->
         <div id="space-area">
             <div class="stars"></div>
             
+            <!-- كوكب الأرض السفلي أثناء اللعب -->
             <div id="earth-wrapper">
                 <svg class="earth-svg" viewBox="0 0 500 130" preserveAspectRatio="none">
                     <defs>
@@ -499,32 +627,46 @@
                             <stop offset="80%" stop-color="#075985"/>
                             <stop offset="100%" stop-color="#082f49"/>
                         </linearGradient>
-                        <linearGradient id="lavaGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-                            <stop offset="0%" stop-color="#ef4444"/>
-                            <stop offset="50%" stop-color="#f59e0b"/>
-                            <stop offset="100%" stop-color="#dc2626"/>
-                        </linearGradient>
                     </defs>
 
-                    <!-- هالة الغلاف الجوي -->
-                    <path id="earth-atmosphere" d="M -20 130 Q 250 -35 520 130 Z" fill="url(#atmoGlow)"/>
+                    <path d="M -20 130 Q 250 -35 520 130 Z" fill="url(#atmoGlow)"/>
+                    <path d="M 0 130 Q 250 -10 500 130 Z" fill="url(#oceanGrad)"/>
 
-                    <!-- مياه المحيط -->
-                    <path id="earth-ocean" d="M 0 130 Q 250 -10 500 130 Z" fill="url(#oceanGrad)"/>
-
-                    <!-- القارات والتضاريس الخضراء -->
-                    <path class="earth-land" d="M 25 105 Q 60 40 100 55 Q 130 75 140 100 Q 80 120 25 105 Z" fill="#15803d" opacity="0.95"/>
-                    <path class="earth-land" d="M 45 95 Q 75 55 105 68 Q 120 85 100 105 Z" fill="#22c55e" opacity="0.9"/>
-                    <path class="earth-land" d="M 180 65 Q 230 15 285 30 Q 330 50 315 90 Q 260 85 220 80 Q 185 85 180 65 Z" fill="#166534" opacity="0.95"/>
-                    <path class="earth-land" d="M 215 50 Q 255 25 290 42 Q 280 72 235 68 Z" fill="#22c55e" opacity="0.9"/>
-                    <path class="earth-land" d="M 370 75 Q 415 35 465 65 Q 490 95 440 115 Q 395 105 370 75 Z" fill="#15803d" opacity="0.95"/>
-                    
-                    <!-- سحب الغلاف الجوي -->
-                    <path id="earth-clouds" d="M 70 60 Q 120 45 160 55 Q 130 70 85 68 Z M 250 35 Q 310 20 360 38 Q 330 52 270 48 Z M 390 60 Q 430 45 470 58 Q 440 70 400 68 Z" fill="#ffffff" opacity="0.32"/>
-
-                    <!-- شقوق الحمم المتوهجة (تظهر فقط عند تدمير الكوكب) -->
-                    <path id="lava-cracks" style="display:none;" d="M 40 90 L 110 50 L 190 70 L 250 15 L 320 65 L 380 40 L 460 70" stroke="url(#lavaGrad)" stroke-width="6" fill="none" stroke-linecap="round"/>
+                    <path d="M 25 105 Q 60 40 100 55 Q 130 75 140 100 Q 80 120 25 105 Z" fill="#15803d" opacity="0.95"/>
+                    <path d="M 45 95 Q 75 55 105 68 Q 120 85 100 105 Z" fill="#22c55e" opacity="0.9"/>
+                    <path d="M 180 65 Q 230 15 285 30 Q 330 50 315 90 Q 260 85 220 80 Q 185 85 180 65 Z" fill="#166534" opacity="0.95"/>
+                    <path d="M 215 50 Q 255 25 290 42 Q 280 72 235 68 Z" fill="#22c55e" opacity="0.9"/>
+                    <path d="M 370 75 Q 415 35 465 65 Q 490 95 440 115 Q 395 105 370 75 Z" fill="#15803d" opacity="0.95"/>
+                    <path d="M 70 60 Q 120 45 160 55 Q 130 70 85 68 Z M 250 35 Q 310 20 360 38 Q 330 52 270 48 Z M 390 60 Q 430 45 470 58 Q 440 70 400 68 Z" fill="#ffffff" opacity="0.32"/>
                 </svg>
+            </div>
+
+            <!-- المشهد السينمائي لكوكب الأرض الكروي المدمر والقمر الدوار حول الركام -->
+            <div id="cinematic-gameover-scene">
+                <div class="debris-ring"></div>
+                <div class="destroyed-earth-globe">
+                    <!-- صفائح متشققة ومحترقة تطفو فوق الحمم -->
+                    <svg class="globe-crust-svg" viewBox="0 0 200 200">
+                        <!-- قارات متفحمة وكسور -->
+                        <path d="M 40 40 Q 75 25 90 60 Q 65 95 30 75 Z" fill="#1c1917" opacity="0.92"/>
+                        <path d="M 115 30 Q 160 45 150 90 Q 110 80 100 50 Z" fill="#292524" opacity="0.95"/>
+                        <path d="M 35 110 Q 70 120 60 160 Q 25 150 35 110 Z" fill="#1c1917" opacity="0.9"/>
+                        <path d="M 105 115 Q 165 110 145 165 Q 90 155 105 115 Z" fill="#292524" opacity="0.92"/>
+                        <!-- شروخ الحمم المتوهجة -->
+                        <path d="M 90 20 L 105 60 L 85 105 L 125 140 L 95 185" stroke="#f59e0b" stroke-width="4" fill="none" stroke-linecap="round"/>
+                        <path d="M 30 90 L 75 100 L 140 90 L 175 110" stroke="#ef4444" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+                    </svg>
+                </div>
+
+                <!-- مدار القمر والقمر يدور حول ركام الأرض -->
+                <div class="moon-orbit-track">
+                    <div class="moon-orbit-rotator">
+                        <div class="moon-sphere">
+                            <div class="moon-crater" style="width: 5px; height: 5px; top: 4px; left: 5px;"></div>
+                            <div class="moon-crater" style="width: 4px; height: 4px; bottom: 4px; right: 5px;"></div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <div id="meteor-container"></div>
@@ -558,9 +700,9 @@
 
         <!-- شاشة الخسارة -->
         <div id="gameover-modal" class="overlay-screen hidden">
-            <h1 id="t-over" style="color: #ef4444;">تدمر الكوكب!</h1>
+            <h1 id="t-over" style="color: #ef4444; text-shadow: 0 0 15px rgba(239, 68, 68, 0.8);">تدمر الكوكب!</h1>
             <div style="font-size: 16px; margin-bottom: 20px;">
-                <span id="t-final">النتيجة النهائية:</span> <strong id="final-score" style="color: #60a5fa; font-size: 32px;">0</strong>
+                <span id="t-final">النتيجة النهائية:</span> <strong id="final-score" style="color: #60a5fa; font-size: 34px;">0</strong>
             </div>
             <button class="main-btn" id="t-retry-btn" onclick="startGame()">العب مجدداً</button>
         </div>
@@ -569,7 +711,7 @@
 
     <script>
         // ========================================================
-        // نظام الصوتيات الفضائية المولد داخلياً (Web Audio API)
+        // نظام الصوتيات الفضائية المطور (انفجار ضخم وواقعي)
         // ========================================================
         let audioCtx = null;
 
@@ -591,23 +733,26 @@
                 const gain = audioCtx.createGain();
                 osc.type = 'sawtooth';
                 osc.frequency.setValueAtTime(880, audioCtx.currentTime);
-                osc.frequency.exponentialRampToValueAtTime(160, audioCtx.currentTime + 0.32);
+                osc.frequency.exponentialRampToValueAtTime(160, audioCtx.currentTime + 0.3);
                 
-                gain.gain.setValueAtTime(0.28, audioCtx.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.32);
+                gain.gain.setValueAtTime(0.25, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
 
                 osc.connect(gain);
                 gain.connect(audioCtx.destination);
                 osc.start();
-                osc.stop(audioCtx.currentTime + 0.32);
+                osc.stop(audioCtx.currentTime + 0.3);
             } catch(e) {}
         }
 
-        // صوت انفجار النيزك في الفضاء
+        // صوت انفجار ناري حقيقي وضخم عند ضرب النيزك
         function soundMeteorExplosion() {
             if (!audioCtx) return;
             try {
-                const dur = 0.42;
+                const now = audioCtx.currentTime;
+                const dur = 0.55;
+
+                // 1. موجة ضوضاء قوية محطمة (Debris Crunch)
                 const bufferSize = audioCtx.sampleRate * dur;
                 const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
                 const data = buffer.getChannelData(0);
@@ -618,33 +763,35 @@
                 const noise = audioCtx.createBufferSource();
                 noise.buffer = buffer;
 
+                // فلتر تشويش اللهب
                 const filter = audioCtx.createBiquadFilter();
                 filter.type = 'lowpass';
-                filter.frequency.setValueAtTime(900, audioCtx.currentTime);
-                filter.frequency.exponentialRampToValueAtTime(70, audioCtx.currentTime + dur);
+                filter.frequency.setValueAtTime(1400, now);
+                filter.frequency.exponentialRampToValueAtTime(80, now + dur);
 
-                const gain = audioCtx.createGain();
-                gain.gain.setValueAtTime(0.5, audioCtx.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + dur);
+                const noiseGain = audioCtx.createGain();
+                noiseGain.gain.setValueAtTime(0.7, now);
+                noiseGain.gain.exponentialRampToValueAtTime(0.01, now + dur);
 
                 noise.connect(filter);
-                filter.connect(gain);
-                gain.connect(audioCtx.destination);
-                noise.start();
+                filter.connect(noiseGain);
+                noiseGain.connect(audioCtx.destination);
+                noise.start(now);
 
-                // اهتزاز التردد المنخفض Sub-bass
-                const sub = audioCtx.createOscillator();
-                const subGain = audioCtx.createGain();
-                sub.type = 'triangle';
-                sub.frequency.setValueAtTime(140, audioCtx.currentTime);
-                sub.frequency.exponentialRampToValueAtTime(35, audioCtx.currentTime + 0.35);
-                subGain.gain.setValueAtTime(0.4, audioCtx.currentTime);
-                subGain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.35);
+                // 2. دوي وتردد هائل ساقط (Sub-Bass Boom)
+                const boom = audioCtx.createOscillator();
+                const boomGain = audioCtx.createGain();
+                boom.type = 'triangle';
+                boom.frequency.setValueAtTime(200, now);
+                boom.frequency.exponentialRampToValueAtTime(28, now + 0.45);
 
-                sub.connect(subGain);
-                subGain.connect(audioCtx.destination);
-                sub.start();
-                sub.stop(audioCtx.currentTime + 0.35);
+                boomGain.gain.setValueAtTime(0.85, now);
+                boomGain.gain.exponentialRampToValueAtTime(0.01, now + 0.45);
+
+                boom.connect(boomGain);
+                boomGain.connect(audioCtx.destination);
+                boom.start(now);
+                boom.stop(now + 0.45);
             } catch(e) {}
         }
 
@@ -652,26 +799,28 @@
         function soundEarthDamage() {
             if (!audioCtx) return;
             try {
+                const now = audioCtx.currentTime;
                 const osc = audioCtx.createOscillator();
                 const gain = audioCtx.createGain();
                 osc.type = 'sine';
-                osc.frequency.setValueAtTime(110, audioCtx.currentTime);
-                osc.frequency.exponentialRampToValueAtTime(25, audioCtx.currentTime + 0.4);
-                gain.gain.setValueAtTime(0.65, audioCtx.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.4);
+                osc.frequency.setValueAtTime(120, now);
+                osc.frequency.exponentialRampToValueAtTime(25, now + 0.4);
+                gain.gain.setValueAtTime(0.7, now);
+                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.4);
 
                 osc.connect(gain);
                 gain.connect(audioCtx.destination);
-                osc.start();
-                osc.stop(audioCtx.currentTime + 0.4);
+                osc.start(now);
+                osc.stop(now + 0.4);
             } catch(e) {}
         }
 
-        // صوت الانفجار الكارثي الضخم عند الخسارة (يمتد لأكثر من 3 ثوانٍ)
+        // صوت الانفجار الكارثي الضخم عند الخسارة
         function soundCatastrophicExplosion() {
             if (!audioCtx) return;
             try {
-                const dur = 3.4;
+                const now = audioCtx.currentTime;
+                const dur = 3.6;
                 const bufferSize = audioCtx.sampleRate * dur;
                 const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
                 const data = buffer.getChannelData(0);
@@ -684,31 +833,31 @@
 
                 const filter = audioCtx.createBiquadFilter();
                 filter.type = 'lowpass';
-                filter.frequency.setValueAtTime(1200, audioCtx.currentTime);
-                filter.frequency.exponentialRampToValueAtTime(40, audioCtx.currentTime + dur);
+                filter.frequency.setValueAtTime(1600, now);
+                filter.frequency.exponentialRampToValueAtTime(35, now + dur);
 
                 const gain = audioCtx.createGain();
-                gain.gain.setValueAtTime(0.95, audioCtx.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + dur);
+                gain.gain.setValueAtTime(1.0, now);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + dur);
 
                 noise.connect(filter);
                 filter.connect(gain);
                 gain.connect(audioCtx.destination);
-                noise.start();
+                noise.start(now);
 
-                // صوت رعد واهتزاز زلزالي عميق
+                // صوت اهتزاز زلزالي عميق
                 const rumble = audioCtx.createOscillator();
                 const rumbleGain = audioCtx.createGain();
                 rumble.type = 'sawtooth';
-                rumble.frequency.setValueAtTime(80, audioCtx.currentTime);
-                rumble.frequency.exponentialRampToValueAtTime(20, audioCtx.currentTime + dur);
-                rumbleGain.gain.setValueAtTime(0.75, audioCtx.currentTime);
-                rumbleGain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + dur);
+                rumble.frequency.setValueAtTime(90, now);
+                rumble.frequency.exponentialRampToValueAtTime(18, now + dur);
+                rumbleGain.gain.setValueAtTime(0.85, now);
+                rumbleGain.gain.exponentialRampToValueAtTime(0.001, now + dur);
 
                 rumble.connect(rumbleGain);
                 rumbleGain.connect(audioCtx.destination);
-                rumble.start();
-                rumble.stop(audioCtx.currentTime + dur);
+                rumble.start(now);
+                rumble.stop(now + dur);
             } catch(e) {}
         }
 
@@ -739,7 +888,7 @@
                 const osc = audioCtx.createOscillator();
                 const gain = audioCtx.createGain();
                 osc.type = 'sine';
-                osc.frequency.setValueAtTime(480, audioCtx.currentTime);
+                osc.frequency.setValueAtTime(500, audioCtx.currentTime);
                 gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
                 gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.04);
                 osc.connect(gain);
@@ -798,7 +947,7 @@
             });
         }
 
-        // استقبال وتزامن اللغة مع موقع IA Math
+        // مزامنة اللغة مع موقع IA Math
         window.addEventListener('message', function(event) {
             if (event.data && (event.data.lang || event.data.type === 'SET_LANGUAGE')) {
                 let targetLang = event.data.lang;
@@ -861,11 +1010,7 @@
         const spaceArea = document.getElementById('space-area');
         const meteorContainer = document.getElementById('meteor-container');
         const earthWrapper = document.getElementById('earth-wrapper');
-        const earthAtmosphere = document.getElementById('earth-atmosphere');
-        const earthOcean = document.getElementById('earth-ocean');
-        const earthLands = document.querySelectorAll('.earth-land');
-        const earthClouds = document.getElementById('earth-clouds');
-        const lavaCracks = document.getElementById('lava-cracks');
+        const cinematicScene = document.getElementById('cinematic-gameover-scene');
         const gameWrapper = document.getElementById('game-wrapper');
         const flashScreen = document.getElementById('flash-screen');
         const shockwaveRing = document.getElementById('shockwave-ring');
@@ -889,13 +1034,10 @@
             document.getElementById('start-modal').classList.add('hidden');
             document.getElementById('gameover-modal').classList.add('hidden');
             
-            // إعادة ضبط الأرض لمظهرها الطبيعي الجميل
-            earthWrapper.classList.remove('shattered');
-            earthAtmosphere.style.display = 'block';
-            earthOcean.setAttribute('fill', 'url(#oceanGrad)');
-            earthLands.forEach(l => l.style.opacity = '0.95');
-            earthClouds.style.opacity = '0.32';
-            lavaCracks.style.display = 'none';
+            // إعادة ضبط المشهد السينمائي وإظهار كوكب الأرض العادي
+            cinematicScene.classList.remove('active');
+            earthWrapper.style.transform = 'translateX(-50%)';
+            earthWrapper.style.opacity = '1';
             
             score = 0;
             lives = 3;
@@ -918,7 +1060,7 @@
             spawnId = setInterval(spawnMeteor, spawnTime);
         }
 
-        // توليد النيازك حسب التدرج الرياضي
+        // توليد النيازك الواقعية
         function spawnMeteor() {
             let n1, n2, op, ans;
 
@@ -980,23 +1122,36 @@
 
             const el = document.createElement('div');
             el.className = 'meteor';
-            
+
+            // ذيل اللهب
             const flame = document.createElement('div');
             flame.className = 'meteor-flame';
             el.appendChild(flame);
 
+            // الصخرة وفوهاتها البركانية
+            const rock = document.createElement('div');
+            rock.className = 'meteor-rock';
+            rock.innerHTML = `
+                <div class="meteor-crater crater-1"></div>
+                <div class="meteor-crater crater-2"></div>
+                <div class="meteor-crater crater-3"></div>
+            `;
+            el.appendChild(rock);
+
+            // نص المسألة الحسابية
             const label = document.createElement('span');
+            label.className = 'meteor-text';
             label.innerText = `${n1} ${op === 'x' ? '×' : op} ${n2}`;
             el.appendChild(label);
 
             const spaceW = spaceArea.offsetWidth;
-            const maxLeft = Math.max(10, spaceW - 85);
+            const maxLeft = Math.max(10, spaceW - 88);
             const x = Math.floor(Math.random() * maxLeft) + 5;
             el.style.left = `${x}px`;
-            el.style.top = '-80px';
+            el.style.top = '-85px';
 
             meteorContainer.appendChild(el);
-            meteors.push({ el: el, ans: ans, x: x, y: -80, targeted: false });
+            meteors.push({ el: el, ans: ans, x: x, y: -85, targeted: false });
         }
 
         function gameLoop() {
@@ -1040,7 +1195,7 @@
             }
         }
 
-        // إطلاق الصاروخ نحو النيزك المستهدف
+        // إطلاق الصاروخ الدفاعي
         function fireAnswer() {
             initAudio();
             if (currentInput === "") return;
@@ -1048,12 +1203,11 @@
             currentInput = "";
             updateDisplay();
 
-            // فحص أقرب نيزك غير مستهدف
             let sorted = meteors.filter(m => !m.targeted).sort((a, b) => b.y - a.y);
             let targetMeteor = sorted.find(m => m.ans === val);
 
             if (targetMeteor) {
-                targetMeteor.targeted = true; // قفل الهدف
+                targetMeteor.targeted = true;
                 launchMissileAtMeteor(targetMeteor);
             }
         }
@@ -1061,7 +1215,6 @@
         function launchMissileAtMeteor(targetMeteor) {
             soundRocketLaunch();
 
-            // إنشاء عنصر الصاروخ
             const rocket = document.createElement('div');
             rocket.className = 'rocket-projectile';
             rocket.innerHTML = `
@@ -1074,8 +1227,8 @@
             const startX = spaceArea.offsetWidth / 2 - 10;
             const startY = spaceArea.offsetHeight - 35;
             
-            const targetX = targetMeteor.x + 37 - 10;
-            const targetY = targetMeteor.y + 37 - 18;
+            const targetX = targetMeteor.x + 39 - 10;
+            const targetY = targetMeteor.y + 39 - 18;
 
             const dx = targetX - startX;
             const dy = targetY - startY;
@@ -1085,7 +1238,7 @@
             rocket.style.top = `${startY}px`;
             rocket.style.transform = `rotate(${angleDeg}deg)`;
 
-            const duration = 280; // سرعة الطيران بالمللي ثانية
+            const duration = 280;
 
             const animation = rocket.animate([
                 { transform: `translate(0, 0) rotate(${angleDeg}deg)` },
@@ -1099,14 +1252,14 @@
             animation.onfinish = function() {
                 rocket.remove();
                 
-                // دوي انفجار النيزك
+                // دوي انفجار ناري حقيقي عند ضرب النيزك
                 soundMeteorExplosion();
 
-                // تأثير انفجار النيزك وتطاير الشظايا
-                createMeteorExplosionParticles(targetMeteor.x + 37, targetMeteor.y + 37);
+                // تفتت النيزك وتطاير الشظايا
+                createMeteorExplosionParticles(targetMeteor.x + 39, targetMeteor.y + 39);
 
                 targetMeteor.el.classList.add('exploded');
-                setTimeout(() => targetMeteor.el.remove(), 200);
+                setTimeout(() => targetMeteor.el.remove(), 220);
 
                 const idx = meteors.indexOf(targetMeteor);
                 if (idx !== -1) meteors.splice(idx, 1);
@@ -1118,10 +1271,10 @@
         }
 
         function createMeteorExplosionParticles(x, y) {
-            for (let i = 0; i < 14; i++) {
+            for (let i = 0; i < 16; i++) {
                 const p = document.createElement('div');
                 p.className = 'debris-piece';
-                const s = Math.random() * 6 + 3;
+                const s = Math.random() * 7 + 3;
                 p.style.width = `${s}px`;
                 p.style.height = `${s}px`;
                 p.style.left = `${x}px`;
@@ -1129,7 +1282,7 @@
                 spaceArea.appendChild(p);
 
                 const angle = Math.random() * Math.PI * 2;
-                const dist = Math.random() * 60 + 20;
+                const dist = Math.random() * 70 + 20;
                 const destX = Math.cos(angle) * dist;
                 const destY = Math.sin(angle) * dist;
 
@@ -1137,12 +1290,12 @@
                     { transform: 'translate(0, 0) scale(1)', opacity: 1 },
                     { transform: `translate(${destX}px, ${destY}px) scale(0)`, opacity: 0 }
                 ], {
-                    duration: 350,
+                    duration: 380,
                     easing: 'ease-out',
                     fill: 'forwards'
                 });
 
-                setTimeout(() => p.remove(), 400);
+                setTimeout(() => p.remove(), 420);
             }
         }
 
@@ -1168,51 +1321,50 @@
         }
 
         // ========================================================
-        // الانفجار الكارثي وعرض الكوكب المدمّر لمدة 3.5 ثوانٍ كاملة
+        // الانفجار الكارثي وعرض كوكب الأرض الكروي المدمر مع القمر
         // ========================================================
         function triggerCatastrophicExplosion() {
             clearInterval(loopId);
             clearInterval(spawnId);
 
-            // صوت الانفجار الضخم الطويل
+            // دوي الانفجار الكارثي الهائل
             soundCatastrophicExplosion();
 
-            // وميض أبيض أولي
+            // فلاش الضوء الأبيض
             flashScreen.style.opacity = '0.95';
-            setTimeout(() => { flashScreen.style.opacity = '0'; }, 220);
+            setTimeout(() => { flashScreen.style.opacity = '0'; }, 200);
 
-            // تحول الأرض لكوكب مدمر متصدع ومحترق
-            earthWrapper.classList.add('shattered');
-            earthAtmosphere.style.display = 'none';
-            earthOcean.setAttribute('fill', '#1c1917'); // تحول المحيطات لرماد مظلم
-            earthLands.forEach(l => l.style.opacity = '0.35');
-            earthClouds.style.opacity = '0.08';
-            lavaCracks.style.display = 'block'; // شقوق الحمم البركانية تتوهج
+            // إخفاء الأرض السفلية بسلاسة
+            earthWrapper.style.transform = 'translateX(-50%) translateY(90px)';
+            earthWrapper.style.opacity = '0';
 
-            // انطلاق موجة الصدمة
+            // تفعيل المشهد الكروي السينمائي لكوكب الأرض المدمر والقمر
+            cinematicScene.classList.add('active');
+
+            // انطلاق موجة الصدمة الكوكبية
             shockwaveRing.classList.remove('fire');
             void shockwaveRing.offsetWidth;
             shockwaveRing.classList.add('fire');
 
-            // اهتزاز شديد للشاشة
+            // اهتزاز شديد وعنيف للشاشة
             gameWrapper.classList.add('shake-earth');
 
-            // قذف الحمم والصخور من قلب الكوكب
-            const centerX = spaceArea.offsetWidth / 2;
-            const centerY = spaceArea.offsetHeight - 30;
+            // شظايا الحمم المتطايرة
+            const spaceW = spaceArea.offsetWidth;
+            const spaceH = spaceArea.offsetHeight;
 
-            for (let i = 0; i < 28; i++) {
+            for (let i = 0; i < 30; i++) {
                 const p = document.createElement('div');
                 p.className = 'debris-piece';
                 const sz = Math.random() * 9 + 4;
                 p.style.width = `${sz}px`;
                 p.style.height = `${sz}px`;
-                p.style.left = `${centerX}px`;
-                p.style.top = `${centerY}px`;
+                p.style.left = `${spaceW / 2}px`;
+                p.style.top = `${spaceH / 2}px`;
                 spaceArea.appendChild(p);
 
-                const angle = Math.random() * Math.PI - Math.PI; // نصف دائرة نحو الأعلى
-                const dist = Math.random() * 200 + 70;
+                const angle = Math.random() * Math.PI * 2;
+                const dist = Math.random() * 190 + 50;
                 const destX = Math.cos(angle) * dist;
                 const destY = Math.sin(angle) * dist;
 
@@ -1220,25 +1372,25 @@
                     { transform: 'translate(0, 0) scale(1)', opacity: 1 },
                     { transform: `translate(${destX}px, ${destY}px) scale(0)`, opacity: 0 }
                 ], {
-                    duration: Math.random() * 800 + 500,
+                    duration: Math.random() * 800 + 600,
                     easing: 'ease-out',
                     fill: 'forwards'
                 });
 
-                setTimeout(() => p.remove(), 1400);
+                setTimeout(() => p.remove(), 1500);
             }
 
             meteors.forEach(m => m.el.remove());
             meteors = [];
 
             // ====================================================
-            // الكوكب المدمر يبقى ظاهراً لمدة 3.5 ثوانٍ كاملة قبل ظهور النافذة
+            // المشهد يبقى ظاهراً لمدة 4 ثوانٍ كاملة قبل ظهور النافذة
             // ====================================================
             setTimeout(() => {
                 gameWrapper.classList.remove('shake-earth');
                 document.getElementById('final-score').innerText = score;
                 document.getElementById('gameover-modal').classList.remove('hidden');
-            }, 3500);
+            }, 4000);
         }
     </script>
 </body>
